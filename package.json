@@ -3,6 +3,9 @@
   "version": "12.19.3",
   "license": "UNLICENSED",
   "repository": "https://github.com/untapped-solutions/baddie.git",
+  "description": "Backend Architecture via Domain-Driven Design: Integration Engine",
+  "prepublish": "tsc --build",
+  "main": "./dist/index.js",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
