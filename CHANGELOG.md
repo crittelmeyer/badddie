@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.20.0](https://github.com/untapped-solutions/baddie/compare/v12.19.4...v12.20.0) (2023-06-26)
+
+
+### Features
+
+* **fix:** nats ([8b9f417](https://github.com/untapped-solutions/baddie/commit/8b9f4170a5e8d86ca02e9169ee495a1c16dfc4b0))
+
 ### [12.19.4](https://github.com/untapped-solutions/baddie/compare/v12.19.3...v12.19.4) (2023-06-09)
 
 

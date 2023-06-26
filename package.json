@@ -1,6 +1,6 @@
 {
   "name": "@untapped-solutions/badddie",
-  "version": "12.19.4",
+  "version": "12.20.0",
   "license": "UNLICENSED",
   "repository": "https://github.com/untapped-solutions/baddie.git",
   "description": "Backend Architecture via Domain-Driven Design: Integration Engine",
