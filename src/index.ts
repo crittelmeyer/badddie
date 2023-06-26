@@ -1,15 +1,18 @@
+import { JSONCodec } from 'nats'
 import { DataSource } from 'typeorm'
 
 import type { Express, Request, Response } from 'express'
 import type { JetStreamManager, NatsConnection } from 'nats'
 import type { Logger } from 'winston'
-import type { Command, Func, Query } from './types'
+import type { Command, Func, PublishedEvent, Query } from './types'
 
 type Method = 'post' | 'get'
 
 let dataSource: DataSource
 
 export const getDataSource = () => dataSource
+
+const jc = JSONCodec()
 
 const registerFunction = (
   logger: Logger,
@@ -22,11 +25,9 @@ const registerFunction = (
   // register routes
   if (fn.apiUrl) {
     logger.info(`Registering URL: ${fn.apiUrl}`)
+
     app[method](fn.apiUrl, async function (req: Request, res: Response) {
       const payload = req.body
-
-      console.log('REMOVE ME: here is the request', payload)
-
       const { response, events } = await fn.function(logger, dataSource, payload, fn.services)
 
       // publish events to nats
@@ -34,14 +35,27 @@ const registerFunction = (
         // create a jetstream client:
         const js = natsConnection.jetstream()
 
-        fn.eventsEmitted?.forEach(async (eventEmitted: string) => {
-          // publish message
-          const pa = await js.publish(`${channelPrefix}.${eventEmitted}`)
+        let hasAllDeclaredEvents = true
 
-          logger.info(`Published to ${channelPrefix}.${eventEmitted}: ${pa.stream}, ${pa.seq}, ${pa.duplicate}`)
+        fn.eventsEmitted?.forEach(async (eventEmitted: string) => {
+          if (!events?.map(evt => evt.type).includes(eventEmitted)) {
+            hasAllDeclaredEvents = false
+          }
+        })
+
+        if (!hasAllDeclaredEvents) {
+          logger.warning(
+            `There are events declared in the spec file for the ${fn.apiUrl} endpoint that are not being returned by the function. This won't necessarily break anything, but spec files are meant to be an at-a-glance location for understanding a domain at a high level, and side effects are an important part of this understanding.`
+          )
+        }
+
+        events?.forEach(async (evt: PublishedEvent) => {
+          // publish message
+          await js.publish(`${channelPrefix}.${evt.type}`, jc.encode(evt.data))
+
+          logger.info(`Published to ${channelPrefix}.${evt.type}: ${JSON.stringify(evt.data)}`)
         })
       }
-      console.log('REMOVE ME: here are the events', events)
 
       res.json(response)
     })
@@ -55,7 +69,7 @@ const badddie = async (
   authInfo: any,
   persistenceInfo: any
 ) => {
-  console.log(authInfo, persistenceInfo)
+  console.log(`TODO: do something with this: ${JSON.stringify(authInfo)}`)
 
   dataSource = new DataSource({
     type: persistenceInfo.type,
@@ -73,10 +87,10 @@ const badddie = async (
   dataSource
     .initialize()
     .then(() => {
-      console.log('Data Source has been initialized!')
+      logger.info('Data source has been initialized')
     })
     .catch((err: any) => {
-      console.error('Error during Data Source initialization:', err)
+      console.error('Error during data source initialization:', err)
     })
 
   let jetStreamManager: JetStreamManager
