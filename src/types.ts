@@ -1,8 +1,18 @@
 import type { DataSource } from 'typeorm'
 import type { Logger } from 'winston'
 
+export type PublishedEvent = {
+  type: string
+  data: any
+}
+
 export type Func = {
-  function: (logger: Logger, dataSource: DataSource, payload: any, services: any) => { response: any; events?: Event[] }
+  function: (
+    logger: Logger,
+    dataSource: DataSource,
+    payload: any,
+    services: any
+  ) => { response: any; events?: PublishedEvent[] }
   apiUrl?: string
   eventsEmitted?: string[]
   services?: (...args: any[]) => any

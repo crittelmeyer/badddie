@@ -5,14 +5,18 @@
   "repository": "https://github.com/untapped-solutions/baddie.git",
   "description": "Backend Architecture via Domain-Driven Design: Integration Engine",
   "prepublish": "tsc --build",
-  "main": "./dist/index.js",
+  "main": "./dist/index",
+  "types": "./dist/index",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
     "build": "tsc --build",
-    "dev": "dotenv -e .env -- ts-node-dev -r tsconfig-paths/register demos/todoList/index.ts --inspect --respawn demos/todoList/index.ts",
+    "demo": "dotenv -e .env -- ts-node-dev -r tsconfig-paths/register demos/todoList/index.ts --inspect --respawn demos/todoList/index.ts",
+    "dev:build": "nodemon -e js,jsx,ts,tsx --ignore dist/ -x yarn build",
+    "dev:push": "nodemon --watch dist -x yalc push --private",
+    "dev": "yarn dev:build & yarn dev:push",
     "lint": "eslint . --ext=ts,tsx",
     "lint:fix": "eslint . --ext=ts,tsx --fix",
     "migrate": "yarn typeorm migration:run -d dist/migrations-config.js",
@@ -52,6 +56,7 @@
     "eslint-plugin-storybook": "^0.5.12",
     "eslint-plugin-unused-imports": "^2.0.0",
     "lint-staged": "^11.0.0",
+    "nodemon": "^2.0.15",
     "prettier": "^2.7.1",
     "standard-version": "^9.5.0",
     "ts-node": "^10.5.0",

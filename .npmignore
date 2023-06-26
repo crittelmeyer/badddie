@@ -1,0 +1,5 @@
+src/
+demos/
+migrations/
+*.md
+*.tgz
