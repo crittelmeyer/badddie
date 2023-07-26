@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.21.0](https://github.com/untapped-solutions/baddie/compare/v12.20.0...v12.21.0) (2023-07-26)
+
+
+### Features
+
+* **errors:** improved error handling ([7796df1](https://github.com/untapped-solutions/baddie/commit/7796df1fa09bfc2a68b09173877ccaee1bcd5520))
+
 ## [12.20.0](https://github.com/untapped-solutions/baddie/compare/v12.19.4...v12.20.0) (2023-06-26)
 
 
