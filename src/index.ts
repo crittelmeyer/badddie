@@ -14,6 +14,35 @@ export const getDataSource = () => dataSource
 
 const jc = JSONCodec()
 
+const getErrors = (error: any) => {
+  // See https://codeopinion.com/problem-details-for-better-rest-http-api-errors/
+  const [_, type, instance] = error.toString().split(':')
+
+  switch (type.trim()) {
+    case 'User already exists':
+      return {
+        type: 'User already exists', // ideally this would be a URL to a human-readable explanation of the error. It should be unique and acts as the error id
+        title: 'Cannot create user',
+        status: 400,
+        detail: 'User already exists',
+        instance
+      }
+    case 'User not found':
+      return {
+        type: 'User not found',
+        title: 'Cannot find user',
+        status: 400,
+        detail: 'User not found',
+        instance
+      }
+    default:
+      throw error
+    // return {
+    //   error
+    // }
+  }
+}
+
 const registerFunction = (
   logger: Logger,
   app: Express,
@@ -27,37 +56,53 @@ const registerFunction = (
     logger.info(`Registering URL: ${fn.apiUrl}`)
 
     app[method](fn.apiUrl, async function (req: Request, res: Response) {
-      const payload = req.body
-      const { response, events } = await fn.function(logger, dataSource, payload, fn.services)
-
-      // publish events to nats
-      if (natsConnection) {
-        // create a jetstream client:
-        const js = natsConnection.jetstream()
-
-        let hasAllDeclaredEvents = true
-
-        fn.eventsEmitted?.forEach(async (eventEmitted: string) => {
-          if (!events?.map(evt => evt.type).includes(eventEmitted)) {
-            hasAllDeclaredEvents = false
-          }
-        })
-
-        if (!hasAllDeclaredEvents) {
-          logger.warning(
-            `There are events declared in the spec file for the ${fn.apiUrl} endpoint that are not being returned by the function. This won't necessarily break anything, but spec files are meant to be an at-a-glance location for understanding a domain at a high level, and side effects are an important part of this understanding.`
-          )
-        }
-
-        events?.forEach(async (evt: PublishedEvent) => {
-          // publish message
-          await js.publish(`${channelPrefix}.${evt.type}`, jc.encode(evt.data))
-
-          logger.info(`Published to ${channelPrefix}.${evt.type}: ${JSON.stringify(evt.data)}`)
-        })
+      const payload = {
+        ...req.body,
+        ...req.params
       }
 
-      res.json(response)
+      let response
+      let events: any
+      let status = 200
+
+      try {
+        const result = await fn.function(logger, dataSource, payload, fn.services)
+
+        response = result.response
+        events = result.events
+
+        // publish events to nats
+        if (natsConnection) {
+          // create a jetstream client:
+          const js = natsConnection.jetstream()
+
+          let hasAllDeclaredEvents = true
+
+          fn.eventsEmitted?.forEach(async (eventEmitted: string) => {
+            if (!events?.map((evt: any) => evt.type).includes(eventEmitted)) {
+              hasAllDeclaredEvents = false
+            }
+          })
+
+          if (!hasAllDeclaredEvents) {
+            logger.warning(
+              `There are events declared in the spec file for the ${fn.apiUrl} endpoint that are not being returned by the function. This won't necessarily break anything, but spec files are meant to be an at-a-glance location for understanding a domain at a high level, and side effects are an important part of this understanding.`
+            )
+          }
+
+          events?.forEach(async (evt: PublishedEvent) => {
+            // publish message
+            await js.publish(`${channelPrefix}.${evt.type}`, jc.encode(evt.data))
+
+            logger.info(`Published to ${channelPrefix}.${evt.type}: ${JSON.stringify(evt.data)}`)
+          })
+        }
+      } catch (err: any) {
+        response = getErrors(err)
+        status = 400
+      }
+
+      res.status(status).json(response)
     })
   }
 }
@@ -107,7 +152,6 @@ const badddie = async (
           subjects: [`${domain.name}.commands.*`, `${domain.name}.queries.*`]
         })
       }
-
       domain.commands.forEach(async (command: Command) => {
         registerFunction(logger, app, natsConnection, `${domain.name}.commands`, command, 'post')
       })
