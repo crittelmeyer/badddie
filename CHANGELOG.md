@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.22.0](https://github.com/untapped-solutions/baddie/compare/v12.21.0...v12.22.0) (2023-07-31)
+
+
+### Features
+
+* **trigger:** add trigger support ([1e1873e](https://github.com/untapped-solutions/baddie/commit/1e1873e7720f2960ddbee8c20ec6f8c2fe0d0dee))
+
 ## [12.21.0](https://github.com/untapped-solutions/baddie/compare/v12.20.0...v12.21.0) (2023-07-26)
 
 
