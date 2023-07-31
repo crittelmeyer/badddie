@@ -16,6 +16,7 @@ export type Func = {
   apiUrl?: string
   eventsEmitted?: string[]
   services?: (...args: any[]) => any
+  triggers: string[]
 }
 
 export type Command = Func

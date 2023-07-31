@@ -2,7 +2,7 @@ import { JSONCodec } from 'nats'
 import { DataSource } from 'typeorm'
 
 import type { Express, Request, Response } from 'express'
-import type { JetStreamManager, NatsConnection } from 'nats'
+import type { JetStreamManager, NatsConnection, Subscription } from 'nats'
 import type { Logger } from 'winston'
 import type { Command, Func, PublishedEvent, Query } from './types'
 
@@ -85,7 +85,7 @@ const registerFunction = (
           })
 
           if (!hasAllDeclaredEvents) {
-            logger.warning(
+            logger.info(
               `There are events declared in the spec file for the ${fn.apiUrl} endpoint that are not being returned by the function. This won't necessarily break anything, but spec files are meant to be an at-a-glance location for understanding a domain at a high level, and side effects are an important part of this understanding.`
             )
           }
@@ -103,6 +103,24 @@ const registerFunction = (
       }
 
       res.status(status).json(response)
+    })
+  }
+
+  // register side effects
+  if (fn.triggers && natsConnection) {
+    fn.triggers.forEach((trigger: string) => {
+      logger.info(`Registering side effect: ${trigger}`)
+
+      const subscription = natsConnection.subscribe(`${channelPrefix}.${trigger}`)
+
+      const executeSideEffect = async (sub: Subscription) => {
+        for await (const message of sub) {
+          logger.info(`Triggering side effect: ${message.subject}`)
+          fn.function(logger, dataSource, jc.decode(message.data), fn.services)
+        }
+      }
+
+      executeSideEffect(subscription)
     })
   }
 }
