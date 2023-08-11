@@ -27,3 +27,16 @@ export type Domain = {
   commands: Command[]
   queries: Query[]
 }
+
+export enum ErrorType {
+  NotFound = 'NotFound',
+  BadRequest = 'BadRequest',
+  Unauthorized = 'Unauthorized',
+  Forbidden = 'Forbidden',
+  InternalServerError = 'InternalServerError',
+  Conflict = 'Conflict',
+  TooManyRequests = 'TooManyRequests',
+  NotImplemented = 'NotImplemented',
+  ServiceUnavailable = 'ServiceUnavailable',
+  GatewayTimeout = 'GatewayTimeout'
+}

@@ -5,6 +5,9 @@ import type { Express, Request, Response } from 'express'
 import type { JetStreamManager, NatsConnection, Subscription } from 'nats'
 import type { Logger } from 'winston'
 import type { Command, Func, PublishedEvent, Query } from './types'
+import { CustomError } from './custom-error'
+export { CustomError } from './custom-error'
+export { ErrorType } from './types'
 
 type Method = 'post' | 'get'
 
@@ -16,30 +19,20 @@ const jc = JSONCodec()
 
 const getErrors = (error: any) => {
   // See https://codeopinion.com/problem-details-for-better-rest-http-api-errors/
-  const [_, type, instance] = error.toString().split(':')
-
-  switch (type.trim()) {
-    case 'User already exists':
-      return {
-        type: 'User already exists', // ideally this would be a URL to a human-readable explanation of the error. It should be unique and acts as the error id
-        title: 'Cannot create user',
-        status: 400,
-        detail: 'User already exists',
-        instance
-      }
-    case 'User not found':
-      return {
-        type: 'User not found',
-        title: 'Cannot find user',
-        status: 400,
-        detail: 'User not found',
-        instance
-      }
-    default:
-      throw error
-    // return {
-    //   error
-    // }
+  if (error instanceof CustomError || error.isCustomError) {
+    return {
+      type: error.type,
+      status: error.statusCode,
+      detail: error.detail,
+      message: error.message
+    }
+  }
+  const spliteError = error.toString().split(':')
+  return {
+    type: 'UnknownError',
+    status: 500,
+    detail: 'An unknown error occurred',
+    message: spliteError[2].trim() ?? error.toString().trim()
   }
 }
 
