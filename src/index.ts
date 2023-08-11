@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm'
 import type { Express, Request, Response } from 'express'
 import type { JetStreamManager, NatsConnection, Subscription } from 'nats'
 import type { Logger } from 'winston'
-import type { Command, Func, PublishedEvent, Query } from './types'
+import { ErrorType, type Command, type Func, type PublishedEvent, type Query } from './types'
 import { CustomError } from './custom-error'
 export { CustomError } from './custom-error'
 export { ErrorType } from './types'
@@ -27,12 +27,17 @@ const getErrors = (error: any) => {
       message: error.message
     }
   }
-  const spliteError = error.toString().split(':')
+  const splitedError = error.toString().split(':')
+  let errorMessage = splitedError[2]
+
+  if (errorMessage === undefined) {
+    errorMessage = splitedError[1]
+  }
   return {
-    type: 'UnknownError',
+    type: ErrorType.InternalServerError,
     status: 500,
     detail: 'An unknown error occurred',
-    message: spliteError[2].trim() ?? error.toString().trim()
+    message: errorMessage.trim() ?? error.toString().trim()
   }
 }
 
