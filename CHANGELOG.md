@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.23.0](https://github.com/untapped-solutions/baddie/compare/v12.22.0...v12.23.0) (2023-08-14)
+
+
+### Features
+
+* **errorTypes:** improve error types by batching status code and default titles with type names ([43527be](https://github.com/untapped-solutions/baddie/commit/43527be8b66d32b8ae745fb83e605814f31a7e0c))
+* **format:** update format to match "problem details" spec ([3596f41](https://github.com/untapped-solutions/baddie/commit/3596f417c2cd033f21299b4717d8fd9a7a2e77f5))
+
+
+### Bug Fixes
+
+* error typing ([37bb927](https://github.com/untapped-solutions/baddie/commit/37bb927935d9db8089f50b11acbf66b9756a2220))
+
 ## [12.22.0](https://github.com/untapped-solutions/baddie/compare/v12.21.0...v12.22.0) (2023-07-31)
 
 
