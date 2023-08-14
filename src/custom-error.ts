@@ -1,17 +1,21 @@
-import { ErrorType } from 'types'
+import type { ErrorType } from './types'
 
 export class CustomError extends Error {
+  type: ErrorType
   statusCode: number
-  type: string
-  detail: string
+  title: string
+  instance: string
   isCustomError: boolean
 
-  constructor(message: string, type?: ErrorType, statusCode = 400, detail?: string) {
-    super(message)
-    this.type = type || 'DefaultErrorType'
+  constructor(detail: string, type?: ErrorType, statusCode = 400, title?: string, instance = '') {
+    super(detail)
+
+    this.type = type || 'UnknownErrorType'
     this.statusCode = statusCode
-    this.detail = detail || message
+    this.title = title || detail
+    this.instance = instance
     this.isCustomError = true
+
     Object.setPrototypeOf(this, CustomError.prototype)
   }
 }

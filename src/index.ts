@@ -1,15 +1,26 @@
 import { JSONCodec } from 'nats'
 import { DataSource } from 'typeorm'
 
+import { CustomError } from './custom-error'
+
 import type { Express, Request, Response } from 'express'
 import type { JetStreamManager, NatsConnection, Subscription } from 'nats'
 import type { Logger } from 'winston'
-import { ErrorType, type Command, type Func, type PublishedEvent, type Query } from './types'
-import { CustomError } from './custom-error'
+import type { ErrorType } from './types'
+import type { Command, Func, PublishedEvent, Query } from './types'
+
 export { CustomError } from './custom-error'
-export { ErrorType } from './types'
+export type { ErrorType } from './types'
 
 type Method = 'post' | 'get'
+
+type ProblemDetailsError = {
+  type: ErrorType
+  title: string
+  status: number
+  detail: string
+  instance: string
+}
 
 let dataSource: DataSource
 
@@ -17,27 +28,25 @@ export const getDataSource = () => dataSource
 
 const jc = JSONCodec()
 
-const getErrors = (error: any) => {
+const formatError = (error: any): ProblemDetailsError => {
   // See https://codeopinion.com/problem-details-for-better-rest-http-api-errors/
+
   if (error instanceof CustomError || error.isCustomError) {
     return {
       type: error.type,
+      title: error.title,
       status: error.statusCode,
-      detail: error.detail,
-      message: error.message
+      detail: error.message,
+      instance: error.instance
     }
   }
-  const splitedError = error.toString().split(':')
-  let errorMessage = splitedError[2]
 
-  if (errorMessage === undefined) {
-    errorMessage = splitedError[1]
-  }
   return {
-    type: ErrorType.InternalServerError,
+    type: 'InternalServerError',
     status: 500,
-    detail: 'An unknown error occurred',
-    message: errorMessage.trim() ?? error.toString().trim()
+    title: 'An unknown error occurred',
+    detail: error.toString().trim(),
+    instance: error.toString().trim()
   }
 }
 
@@ -96,8 +105,8 @@ const registerFunction = (
           })
         }
       } catch (err: any) {
-        response = getErrors(err)
-        status = 400
+        response = formatError(err)
+        status = response.status
       }
 
       res.status(status).json(response)

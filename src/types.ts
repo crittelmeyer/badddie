@@ -28,15 +28,15 @@ export type Domain = {
   queries: Query[]
 }
 
-export enum ErrorType {
-  NotFound = 'NotFound',
-  BadRequest = 'BadRequest',
-  Unauthorized = 'Unauthorized',
-  Forbidden = 'Forbidden',
-  InternalServerError = 'InternalServerError',
-  Conflict = 'Conflict',
-  TooManyRequests = 'TooManyRequests',
-  NotImplemented = 'NotImplemented',
-  ServiceUnavailable = 'ServiceUnavailable',
-  GatewayTimeout = 'GatewayTimeout'
-}
+export type ErrorType =
+  | 'NotFound'
+  | 'BadRequest'
+  | 'Unauthorized'
+  | 'Forbidden'
+  | 'InternalServerError'
+  | 'Conflict'
+  | 'TooManyRequests'
+  | 'NotImplemented'
+  | 'ServiceUnavailable'
+  | 'GatewayTimeout'
+  | 'UnknownErrorType'
