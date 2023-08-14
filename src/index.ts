@@ -6,16 +6,14 @@ import { CustomError } from './custom-error'
 import type { Express, Request, Response } from 'express'
 import type { JetStreamManager, NatsConnection, Subscription } from 'nats'
 import type { Logger } from 'winston'
-import type { ErrorType } from './types'
-import type { Command, Func, PublishedEvent, Query } from './types'
+import type { Command, ErrorTypeName, Func, PublishedEvent, Query } from './types'
 
 export { CustomError } from './custom-error'
-export type { ErrorType } from './types'
 
 type Method = 'post' | 'get'
 
 type ProblemDetailsError = {
-  type: ErrorType
+  type: ErrorTypeName
   title: string
   status: number
   detail: string

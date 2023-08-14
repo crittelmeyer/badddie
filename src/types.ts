@@ -28,7 +28,7 @@ export type Domain = {
   queries: Query[]
 }
 
-export type ErrorType =
+export type ErrorTypeName =
   | 'NotFound'
   | 'BadRequest'
   | 'Unauthorized'
@@ -40,3 +40,11 @@ export type ErrorType =
   | 'ServiceUnavailable'
   | 'GatewayTimeout'
   | 'UnknownErrorType'
+
+export type ErrorType = Record<
+  ErrorTypeName,
+  {
+    statusCode: number
+    title: string
+  }
+>
