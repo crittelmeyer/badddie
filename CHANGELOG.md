@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [12.23.2](https://github.com/crittelmeyer/baddie/compare/v12.23.1...v12.23.2) (2023-10-20)
+
 ### [12.23.1](https://github.com/untapped-solutions/baddie/compare/v12.23.0...v12.23.1) (2023-08-14)
 
 ## [12.23.0](https://github.com/untapped-solutions/baddie/compare/v12.22.0...v12.23.0) (2023-08-14)
