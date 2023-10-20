@@ -1,8 +1,8 @@
 {
-  "name": "@untapped-solutions/badddie",
+  "name": "@phoenix-ai/badddie",
   "version": "12.23.1",
   "license": "UNLICENSED",
-  "repository": "https://github.com/untapped-solutions/baddie.git",
+  "repository": "https://github.com/phoenix-ai/baddie.git",
   "description": "Backend Architecture via Domain-Driven Design: Integration Engine",
   "prepublish": "tsc --build",
   "main": "./dist/index",
@@ -37,8 +37,8 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@untapped-solutions/eslint-config": "^9.0.2",
-    "@untapped-solutions/eslint-plugin": "^2.0.1",
+    "@phoenix-ai/eslint-config": "^9.0.2",
+    "@phoenix-ai/eslint-plugin": "^2.0.1",
     "@types/express": "^4.17.13",
     "@types/pg": "^8.6.1",
     "@types/winston": "^2.4.4",

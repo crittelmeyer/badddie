@@ -55,7 +55,7 @@ const registerFunction = (
   channelPrefix: string,
   fn: Func,
   method: Method
-) => {
+) => { // eslint-disable-line
   // register routes
   if (fn.apiUrl) {
     logger.info(`Registering URL: ${fn.apiUrl}`)
@@ -116,7 +116,7 @@ const registerFunction = (
     fn.triggers.forEach((trigger: string) => {
       logger.info(`Registering side effect: ${trigger}`)
 
-      const subscription = natsConnection.subscribe(`${channelPrefix}.${trigger}`)
+      const subscription = natsConnection.subscribe(trigger.indexOf('.') > -1 ? trigger : `${channelPrefix}.${trigger}`)
 
       const executeSideEffect = async (sub: Subscription) => {
         for await (const message of sub) {

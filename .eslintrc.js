@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@untapped-solutions']
+  extends: ['@phoenix-ai']
 }
