@@ -9,7 +9,6 @@ export const getUsers = async (logger: Logger, dataSource: DataSource) => {
   // Fetch all users
   const users = await dataSource.getRepository(UserEntity).find()
 
-  console.log('ABCDEF!!!!!', users)
   logger.info(`Fetched ${users.length} users`)
 
   // Prepare the event
