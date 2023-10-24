@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@phoenix-ai']
+  extends: ['@crittelmeyer']
 }
