@@ -226,7 +226,7 @@ const registerFunctionWithGoogle = (
       let topic
 
       topics.forEach((currentTopic: any) => {
-        if (currentTopic.name === `projects/one-on-one-spot/topics/${channelPrefix}.${trigger}`) {
+        if (currentTopic.name === `projects/one-on-one-spot/topics/${trigger}`) {
           exists = true
           topic = currentTopic
         }
