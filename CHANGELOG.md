@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.24.0](https://github.com/crittelmeyer/baddie/compare/v12.23.2...v12.24.0) (2023-10-24)
+
+
+### Features
+
+* **google:** add google support ([3f8d5ea](https://github.com/crittelmeyer/baddie/commit/3f8d5eafa3984185ab38b9c6e5906e2dd75c3cd3))
+
 ### [12.23.2](https://github.com/crittelmeyer/baddie/compare/v12.23.1...v12.23.2) (2023-10-20)
 
 ### [12.23.1](https://github.com/untapped-solutions/baddie/compare/v12.23.0...v12.23.1) (2023-08-14)
