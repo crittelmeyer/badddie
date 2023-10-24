@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [12.24.1](https://github.com/crittelmeyer/baddie/compare/v12.24.0...v12.24.1) (2023-10-24)
+
+
+### Bug Fixes
+
+* **topic:** fix topic name ([67dde9b](https://github.com/crittelmeyer/baddie/commit/67dde9b5218be8414771fcceeabb5cef0e86d208))
+
 ## [12.24.0](https://github.com/crittelmeyer/baddie/compare/v12.23.2...v12.24.0) (2023-10-24)
 
 

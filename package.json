@@ -1,6 +1,6 @@
 {
   "name": "@crittelmeyer/badddie",
-  "version": "12.24.0",
+  "version": "12.24.1",
   "license": "UNLICENSED",
   "repository": "https://github.com/crittelmeyer/baddie.git",
   "description": "Backend Architecture via Domain-Driven Design: Integration Engine",
