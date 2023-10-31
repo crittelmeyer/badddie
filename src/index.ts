@@ -203,7 +203,7 @@ const registerFunctionWithGoogle = (
             // publish message
             const topic = pubSub.topic(`${channelPrefix}.${evt.type}`)
 
-            topic.publishMessage({ data: Buffer.from(evt.data) })
+            topic.publishMessage({ data: Buffer.from(JSON.stringify(evt.data)) })
 
             logger.info(`Published to ${channelPrefix}.${evt.type}: ${JSON.stringify(evt.data)}`)
           })
