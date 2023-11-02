@@ -127,8 +127,10 @@ const registerFunctionWithNats = (
 
       const executeSideEffect = async (sub: Subscription) => {
         for await (const message of sub) {
-          logger.info(`Triggering side effect: ${message.subject}`)
-          fn.function(logger, dataSource, jc.decode(message.data), fn.services)
+          if (message.subject) {
+            logger.info(`Triggering side effect: ${message.subject}`)
+            fn.function(logger, dataSource, jc.decode(message.data), fn.services)
+          }
         }
       }
 
@@ -255,8 +257,10 @@ const registerFunctionWithGoogle = (
       }
 
       subscription.on('message', (message: any) => {
-        logger.info(`Triggering side effect: ${message.subject}`)
-        fn.function(logger, dataSource, message.data.toString(), fn.services)
+        if (message.subject) {
+          logger.info(`Triggering side effect: ${message.subject}`)
+          fn.function(logger, dataSource, message.data.toString(), fn.services)
+        }
       })
     })
   }
